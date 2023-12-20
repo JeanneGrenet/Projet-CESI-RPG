@@ -17,6 +17,7 @@ class Entity:
 class Player(Entity) :
     def __init__(self):
         super().__init__("player")
+        self.name = ""
         self.xp = 0    
         self.maxLife = 50
         self.life = self.maxLife
@@ -130,6 +131,7 @@ class Monster(Entity) :
             if player.life <= 0 :
                 console.print("Vous êtes mort ! Vous avez perdu !", style="bold red")
                 deletTables()
+                addUser((player.name, player.level, player.attackLevel, player.defenseLevel, player.speedLevel))
                 exit()
         player.xp += self.level//2 | 1
         player.life = player.maxLife

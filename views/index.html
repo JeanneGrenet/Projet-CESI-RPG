@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-teal-50 w-screen flex flex-col gap-4 justify-center py ">
+    <section class="px-8 md:px-32 mt-16 w-full flex flex-col gap-2">
+            <h1 class="text-3xl text-teal-900 font-bold">
+                La liste des <span class="text-teal-500">joueurs</span>
+            </h1>
+
+        <div class="container mx-auto my-8">
+            <table class="min-w-full bg-white border border-teal-500">
+                <thead>
+                <tr class="bg-teal-500 text-white">
+                    <th class="py-2 px-4">ID</th>
+                    <th class="py-2 px-4">Name</th>
+                    <th class="py-2 px-4">Level</th>
+                    <th class="py-2 px-4">AttackPoints</th>
+                    <th class="py-2 px-4">DefensePoints</th>
+                    <th class="py-2 px-4">SpeedPoints</th>
+
+                </tr>
+                </thead>
+                <tbody>
+
+                <!-- On boucle sur la variable "dogs" -->
+                {% for user in users %}
+                    <tr>
+                        <!-- On affiche les données dynamiquement -->
+                        <td class="border py-2 px-4">{{ user.id }}</td>
+                        <td class="border py-2 px-4">{{ user.name }}</td>
+                        <td class="border py-2 px-4">{{ user.level }}</td>
+                        <td class="border py-2 px-4">{{ user.attackPoints }}</td>
+                        <td class="border py-2 px-4">{{ user.defensePoints }}</td>
+                        <td class="border py-2 px-4">{{ user.speedPoints }}</td>
+                    </tr>
+                {% endfor %}    
+
+                </tbody>
+            </table>
+        </div>
+
+
+    </section>
+</body>
+</html>

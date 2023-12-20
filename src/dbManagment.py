@@ -121,3 +121,29 @@ def allMonsters():
     monsters = cursor.fetchall()
     connection.close()
     return monsters
+
+def addUser(user):
+    connection = sqlite3.connect('Projet-CESI-RPG/rpg.db')
+    cursor = connection.cursor()
+    cursor.execute("""
+        INSERT INTO User(name, level, attackPoints, defensePoints, speedPoints) VALUES(?,?,?,?,?)
+    """, user)
+    connection.commit()
+    connection.close()
+
+#Create the table to save users
+
+connection = sqlite3.connect('Projet-CESI-RPG/rpg.db')
+cursor = connection.cursor()
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS User(
+        id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+        name TEXT,
+        level INTERGER,
+        attackPoints INTEGER,
+        defensePoints INTERGER,
+        speedPoints INTEGER
+    )
+    """)
+connection.commit()
+connection.close()

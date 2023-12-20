@@ -15,6 +15,7 @@ class Game :
         #Boucle du jeu
         run = True
         console.print("Bienvenue dans l'Épopée des Ombres", style="bold")
+        self.player.name = input("Comment vous appelez vous ?\n")
         while run : 
             print("------------------------------------------------------------DUEL------------------------------------------------------------")
             self.monster.fight(self.player)

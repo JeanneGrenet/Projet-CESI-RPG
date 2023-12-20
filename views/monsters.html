@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil</title>
+    <title>Monstres</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-teal-50 w-screen flex flex-col gap-4 justify-center py ">
@@ -12,47 +12,46 @@
         <a href="/monsters" class="bg-teal-500 text-white">Monstres</a>
     </nav>
     <section class="px-8 md:px-32 mt-16 w-full flex flex-col gap-2">
+        <div class="flex justify-between items-center">
             <h1 class="text-3xl text-teal-900 font-bold">
-                La liste des <span class="text-teal-500">joueurs</span>
+                La liste des <span class="text-teal-500">monstres</span>
             </h1>
+
+            <a href="/add" class="bg-teal-500 text-white py-2 px-4 rounded">Ajouter un monstre</a>
+        </div>
 
         <div class="container mx-auto my-8">
             <table class="min-w-full bg-white border border-teal-500">
                 <thead>
                 <tr class="bg-teal-500 text-white">
                     <th class="py-2 px-4">ID</th>
-                    <th class="py-2 px-4">Name</th>
-                    <th class="py-2 px-4">Level</th>
+                    <th class="py-2 px-4">Type</th>
                     <th class="py-2 px-4">AttackPoints</th>
                     <th class="py-2 px-4">DefensePoints</th>
                     <th class="py-2 px-4">SpeedPoints</th>
-                    <th class="py-2 px-4">Date</th>
                     <th class="py-2 px-4">Actions</th>
-
-
 
                 </tr>
                 </thead>
                 <tbody>
 
                 <!-- On boucle sur la variable "users" -->
-                {% for user in users %}
+                {% for monster in monsters %}
                     <tr>
                         <!-- On affiche les données dynamiquement -->
-                        <td class="border py-2 px-4">{{ user.id }}</td>
-                        <td class="border py-2 px-4">{{ user.name }}</td>
-                        <td class="border py-2 px-4">{{ user.level }}</td>
-                        <td class="border py-2 px-4">{{ user.attackPoints }}</td>
-                        <td class="border py-2 px-4">{{ user.defensePoints }}</td>
-                        <td class="border py-2 px-4">{{ user.speedPoints }}</td>
-                        <td class="border py-2 px-4">{{ user.date }}</td>
+                        <td class="border py-2 px-4">{{ monster.id }}</td>
+                        <td class="border py-2 px-4">{{ monster.type }}</td>
+                        <td class="border py-2 px-4">{{ monster.attackPoints }}</td>
+                        <td class="border py-2 px-4">{{ monster.defensePoints }}</td>
+                        <td class="border py-2 px-4">{{ monster.speedPoints }}</td>
                         <td class="border py-2 px-4">
 
                             <!-- On ajoute un bouton pour supprimer la donnée sur la route /delete/<id> -->
-                            <a href="/deleteUser/{{user.id}}">
+                            <a href="/deleteMonster/{{monster.id}}">
                                 <button class="bg-red-500 text-white py-1 px-2 rounded w-full">Delete</button>
                             </a>
                         </td>
+
                     </tr>
                 {% endfor %}    
 

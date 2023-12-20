@@ -1,6 +1,11 @@
 import random
 from rich.console import*
 from dbManagment import*
+from datetime import datetime
+
+date = datetime.now().strftime("%y/%b/%d/%H/%M/%S")
+date = datetime.now().strftime("%d %b %Y : %Hh%M")
+
 console = Console()
 
 
@@ -26,10 +31,11 @@ class Player(Entity) :
         self.accessibleWeapons=[(0,"Poing",1,3)]
         self.currentWeapon = self.accessibleWeapons[0]
         self.equipments = allEquipments()
-        self.equipmentDefense = 0
-        self.defenseLevel = self.level
-        self.attackLevel = self.level * self.currentWeapon[2]
-        self.speedLevel = 10*self.level * self.currentWeapon[3] 
+        self.equipmentDefense = 1
+        self.equipmentSpeed = 1
+        self.updateAttack()
+        self.updateDefense()
+        self.updateSpeed()
     
     def heal(self) :
         life = random.randint(10,self.maxLife)*self.level
@@ -45,8 +51,9 @@ class Player(Entity) :
             self.level += 1
             self.maxLife += 2
             self.xp = 0
-            self.attackLevel = self.level + self.currentWeapon[2]
-            self.speedLevel = 10*self.level * self.currentWeapon[3] 
+            self.updateAttack()
+            self.updateDefense()
+            self.updateSpeed()
             console.print(f"Bravo vous montez de niveau ! Vous êtes niveau {self.level}", style = "bold green")
             if self.level%2 == 0 and len(self.weapons)!=0:
                 console.print(f"Bravo, vous avez gagné l'arme : {self.weapons[0][1]}", style="bold green")
@@ -55,15 +62,15 @@ class Player(Entity) :
             if self.level%4 == 1 and len(self.equipments)!=0:
                 if len(self.equipments) == 1 : 
                     newEquipment = self.equipments.pop(0)
-                    self.equipmentDefense += newEquipment[2]
-                    self.defenseLevel = self.level * self.equipmentDefense
                 else : 
                     i = random.randint(0, len(self.equipments)-1)
                     newEquipment = self.equipments.pop(i)
-                    self.equipmentDefense += newEquipment[2]
-                    self.defenseLevel = self.level * self.equipmentDefense
+                self.equipmentDefense += newEquipment[2]
+                self.equipmentSpeed += newEquipment[3]
+                self.updateDefense()
+                self.updateSpeed()
                 console.print(f"Bravo, vous avez gagné l'equipement : {newEquipment[1]}, votre défense est maintenant de {self.defenseLevel} points", style="bold green")
-            if self.level%3 == 0 :
+            if self.level%3 == 0 and len(monster.monsters) !=0 :
                 monster.activeMonsters.append(monster.monsters[0])
                 monster.monsters.pop(0)
 
@@ -98,17 +105,26 @@ class Player(Entity) :
                 selectedWeapon = int(input("Quelle arme voulez vous choisir ? " + weapons+"\n"))
                 try:
                     self.currentWeapon = self.accessibleWeapons[selectedWeapon-1]
+                    self.updateAttack()
+                    self.updateSpeed()
                 except : 
                     console.print("Cette arme n'est pas attribuée, vous ne réussissez pas à changer d'arme", style="bold cyan")
                 break
-                
+    def updateAttack(self):
+        self.attackLevel = self.level * self.currentWeapon[2]
+        
+    def updateDefense(self):
+        self.defenseLevel = self.level * self.equipmentDefense
 
+    def updateSpeed(self):
+        self.speedLevel = 10*self.level * (self.currentWeapon[3]+self.equipmentSpeed)//2
+        
 class Monster(Entity) :
     def __init__(self):
         super().__init__("monster")
         self.attackLevel = 0
         self.monsters = allMonsters()
-        self.activeMonsters = [[0,"Serpent",1,1,15]]
+        self.activeMonsters = [self.monsters.pop(0)]
 
     def spawn(self,player): 
         self.currentMonster = self.activeMonsters[random.randint(0,len(self.activeMonsters)-1)]
@@ -130,8 +146,7 @@ class Monster(Entity) :
                 console.print(f"Le monstre vous a attaqué : il vous reste {player.life} points de vie", style="green")
             if player.life <= 0 :
                 console.print("Vous êtes mort ! Vous avez perdu !", style="bold red")
-                deletTables()
-                addUser((player.name, player.level, player.attackLevel, player.defenseLevel, player.speedLevel))
+                addUser((player.name, player.level, player.attackLevel, player.defenseLevel, player.speedLevel,date))
                 exit()
         player.xp += self.level//2 | 1
         player.life = player.maxLife

@@ -5,7 +5,6 @@ from dbManagment import *
 class Game : 
     
     def __init__(self):
-        loadTables()
         self.player = Player()
         self.monster = Monster()
         self.nbMonstres = 0
@@ -25,4 +24,3 @@ class Game :
             console.print(f"Félicitations vous aves battu {self.nbMonstres} monstres", style="cyan")
             if self.player.level >= 100 :
                 run = False
-        deletTables()

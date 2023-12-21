@@ -1,7 +1,6 @@
 import sqlite3
-
-
-
+import requests
+import json 
 
 def addMonster(monster): 
     connection = sqlite3.connect('src/rpg.db')
@@ -46,7 +45,7 @@ def deletTables():
     connection.close()
         
 def allWeapons():
-    connection = sqlite3.connect('rpg.db')
+    connection = sqlite3.connect('src/rpg.db')
     cursor = connection.cursor()
     cursor.execute("""SELECT * FROM weapons""")
     weapons = cursor.fetchall()
@@ -54,7 +53,7 @@ def allWeapons():
     return weapons
 
 def allEquipments():
-    connection = sqlite3.connect('rpg.db')
+    connection = sqlite3.connect('src/rpg.db')
     cursor = connection.cursor()
     cursor.execute("""SELECT * FROM equipments""")
     equipments = cursor.fetchall()
@@ -62,7 +61,7 @@ def allEquipments():
     return equipments
 
 def allMonsters():
-    connection = sqlite3.connect('rpg.db')
+    connection = sqlite3.connect('src/rpg.db')
     cursor = connection.cursor()
     cursor.execute("""SELECT * FROM monsters ORDER BY attackPoints""")
     monsters = cursor.fetchall()
@@ -70,15 +69,29 @@ def allMonsters():
     return monsters
 
 def addUser(user):
-    connection = sqlite3.connect('rpg.db')
+    connection = sqlite3.connect('src/rpg.db')
     cursor = connection.cursor()
     cursor.execute("""
         INSERT INTO User(name, level, attackPoints, defensePoints, speedPoints, date) VALUES(?,?,?,?,?,?)
     """, user)
     connection.commit()
     connection.close()
-
-#Create the table to save users
+    
+def apiAddUser(user):
+    URL = "http://127.0.0.1:5000/api/user"
+    TYPE = "application/json"
+    
+    DATA = {"name":user[0],
+            "level":user[1],
+            "attackPoints":user[2],
+            "defensePoints":user[3],
+            "speedPoints":user[4],
+            "date":user[5]}
+    DATA = json.dumps(DATA)
+    response = requests.post(url=URL, data=DATA, headers={'Content-Type': TYPE})
+    print(response)
+    
+#Create and fill the tables
 
 # connection = sqlite3.connect('src/rpg.db')
 # cursor = connection.cursor()

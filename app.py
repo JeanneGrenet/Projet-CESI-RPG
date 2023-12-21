@@ -1,8 +1,5 @@
 import flask
 import sqlite3
-
-
-
 app = flask.Flask(__name__, template_folder='views')
 
 @app.route('/')
@@ -109,3 +106,50 @@ def deleteUser(id):
 
     #On redirige l'utilisateur sur la page d'accueil
     return flask.redirect('/')
+
+@app.route('/api/monsters', methods=['GET'])
+@cross_origin()
+def get_monsters():
+   connection = sqlite3.connect('src/rpg.db')
+   cursor = connection.cursor()
+   cursor.execute('SELECT * FROM monsters ORDER BY attackPoints')
+   monsters = cursor.fetchall()
+   connection.close()
+   
+   list_monsters = []
+
+   for monster in monsters:
+      list_monsters.append({
+         "id": monster[0],
+         "type": monster[1],
+         "attackPoints": monster[2],
+         "defensePoints": monster[3],
+         "speedPoints": monster[4],
+
+      }) 
+
+   return flask.jsonify(list_monsters)
+
+@app.route('/api/user', methods = ['POST'])
+def add_user():
+      if flask.request.method == 'POST':
+
+         name = flask.request.json['name']
+         level = flask.request.json['level']
+         attackPoints = flask.request.json['attackPoints']
+         defensePoints = flask.request.json['defensePoints']
+         speedPoints = flask.request.json['speedPoints']
+         date = flask.request.json['date']
+         
+
+         #On se connecte à la base de données   
+         connection = sqlite3.connect('src/rpg.db')
+
+         cursor = connection.cursor()
+         #On insert la data   
+         cursor.execute('INSERT INTO User(name, level, attackPoints, defensePoints, speedPoints, date) VALUES ("' + name + '", "' + str(level) + '", "' + str(attackPoints) + '", "' + str(defensePoints) + '", "' + str(speedPoints) + '", "' + str(date) + '")')
+         connection.commit()
+         connection.close()
+         
+      return flask.jsonify({"message": "user added successfully"})
+

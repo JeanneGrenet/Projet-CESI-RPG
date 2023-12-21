@@ -8,7 +8,6 @@ date = datetime.now().strftime("%d %b %Y : %Hh%M")
 
 console = Console()
 
-
 class Entity:
     def __init__(self,entity):
         self.level = 1
@@ -117,7 +116,7 @@ class Player(Entity) :
         self.defenseLevel = self.level * self.equipmentDefense
 
     def updateSpeed(self):
-        self.speedLevel = 10*self.level * (self.currentWeapon[3]+self.equipmentSpeed)//2
+        self.speedLevel = 12*self.level * (self.currentWeapon[3]+self.equipmentSpeed)//2
         
 class Monster(Entity) :
     def __init__(self):
@@ -146,7 +145,7 @@ class Monster(Entity) :
                 console.print(f"Le monstre vous a attaqué : il vous reste {player.life} points de vie", style="green")
             if player.life <= 0 :
                 console.print("Vous êtes mort ! Vous avez perdu !", style="bold red")
-                addUser((player.name, player.level, player.attackLevel, player.defenseLevel, player.speedLevel,date))
+                apiAddUser((player.name, player.level, player.attackLevel, player.defenseLevel, player.speedLevel,date))
                 exit()
         player.xp += self.level//2 | 1
         player.life = player.maxLife

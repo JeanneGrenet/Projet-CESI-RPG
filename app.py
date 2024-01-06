@@ -107,29 +107,6 @@ def deleteUser(id):
     #On redirige l'utilisateur sur la page d'accueil
     return flask.redirect('/')
 
-@app.route('/api/monsters', methods=['GET'])
-@cross_origin()
-def get_monsters():
-   connection = sqlite3.connect('src/rpg.db')
-   cursor = connection.cursor()
-   cursor.execute('SELECT * FROM monsters ORDER BY attackPoints')
-   monsters = cursor.fetchall()
-   connection.close()
-   
-   list_monsters = []
-
-   for monster in monsters:
-      list_monsters.append({
-         "id": monster[0],
-         "type": monster[1],
-         "attackPoints": monster[2],
-         "defensePoints": monster[3],
-         "speedPoints": monster[4],
-
-      }) 
-
-   return flask.jsonify(list_monsters)
-
 @app.route('/api/user', methods = ['POST'])
 def add_user():
       if flask.request.method == 'POST':
